@@ -1,0 +1,181 @@
+import java.util.*;
+
+public class PlayFairCipher {
+
+    private static char[][] matrix = new char[5][5];
+    private static String key;
+
+    // Main function
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+
+        // Input key
+        System.out.print("Enter key: ");
+        key = sc.nextLine().toUpperCase().replaceAll("[^A-Z]", "").replace("J", "I");
+
+        // Input plaintext
+        System.out.print("Enter plaintext: ");
+        String plaintext = sc.nextLine().toUpperCase().replaceAll("[^A-Z]", "").replace("J", "I");
+
+        // Generate matrix
+        generateMatrix(key);
+
+        // Display matrix
+        System.out.println("\nPlayfair Cipher Key Matrix:");
+        printMatrix();
+
+        // Prepare plaintext
+        String preparedText = preparePlainText(plaintext);
+        System.out.println("\nPrepared Plaintext (pairs): " + preparedText);
+
+        // Encrypt
+        String ciphertext = encrypt(preparedText);
+        System.out.println("\nCiphertext: " + ciphertext);
+
+        // Decrypt
+        String decrypted = decrypt(ciphertext);
+        System.out.println("\nDecrypted Text: " + decrypted);
+    }
+
+    // Step 1: Generate 5x5 Matrix
+    private static void generateMatrix(String key) {
+        boolean[] used = new boolean[26];
+        int row = 0, col = 0;
+
+        for (char c : key.toCharArray()) {
+            if (!used[c - 'A']) {
+                matrix[row][col] = c;
+                used[c - 'A'] = true;
+                col++;
+                if (col == 5) {
+                    col = 0;
+                    row++;
+                }
+            }
+        }
+
+        // Fill remaining letters
+        for (char c = 'A'; c <= 'Z'; c++) {
+            if (c == 'J') continue; // J merged with I
+            if (!used[c - 'A']) {
+                matrix[row][col] = c;
+                used[c - 'A'] = true;
+                col++;
+                if (col == 5) {
+                    col = 0;
+                    row++;
+                }
+            }
+        }
+    }
+
+    // Print matrix
+    private static void printMatrix() {
+        for (int i = 0; i < 5; i++) {
+            for (int j = 0; j < 5; j++) {
+                System.out.print(matrix[i][j] + " ");
+            }
+            System.out.println();
+        }
+    }
+
+    // Step 2: Prepare plaintext (split into digraphs)
+    private static String preparePlainText(String text) {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < text.length(); i++) {
+            char a = text.charAt(i);
+            char b = (i + 1 < text.length()) ? text.charAt(i + 1) : 'X';
+
+            if (a == b) {
+                sb.append(a).append('X');
+            } else {
+                sb.append(a).append(b);
+                i++;
+            }
+        }
+        if (sb.length() % 2 != 0) {
+            sb.append('X'); // padding
+        }
+        return sb.toString();
+    }
+
+    // Step 3: Encrypt text
+    private static String encrypt(String text) {
+        StringBuilder sb = new StringBuilder();
+
+        for (int i = 0; i < text.length(); i += 2) {
+            char a = text.charAt(i);
+            char b = text.charAt(i + 1);
+
+            int[] posA = findPosition(a);
+            int[] posB = findPosition(b);
+
+            String encryptedPair;
+
+            if (posA[0] == posB[0]) {
+                // Same row
+                encryptedPair = "" + matrix[posA[0]][(posA[1] + 1) % 5] +
+                                     matrix[posB[0]][(posB[1] + 1) % 5];
+            } else if (posA[1] == posB[1]) {
+                // Same column
+                encryptedPair = "" + matrix[(posA[0] + 1) % 5][posA[1]] +
+                                     matrix[(posB[0] + 1) % 5][posB[1]];
+            } else {
+                // Rectangle
+                encryptedPair = "" + matrix[posA[0]][posB[1]] +
+                                     matrix[posB[0]][posA[1]];
+            }
+
+            sb.append(encryptedPair);
+            System.out.println("Encrypting pair " + a + b + " → " + encryptedPair);
+        }
+
+        return sb.toString();
+    }
+
+    // Step 4: Decrypt text
+    private static String decrypt(String text) {
+        StringBuilder sb = new StringBuilder();
+
+        for (int i = 0; i < text.length(); i += 2) {
+            char a = text.charAt(i);
+            char b = text.charAt(i + 1);
+
+            int[] posA = findPosition(a);
+            int[] posB = findPosition(b);
+
+            String decryptedPair;
+
+            if (posA[0] == posB[0]) {
+                // Same row
+                decryptedPair = "" + matrix[posA[0]][(posA[1] + 4) % 5] +
+                                     matrix[posB[0]][(posB[1] + 4) % 5];
+            } else if (posA[1] == posB[1]) {
+                // Same column
+                decryptedPair = "" + matrix[(posA[0] + 4) % 5][posA[1]] +
+                                     matrix[(posB[0] + 4) % 5][posB[1]];
+            } else {
+                // Rectangle
+                decryptedPair = "" + matrix[posA[0]][posB[1]] +
+                                     matrix[posB[0]][posA[1]];
+            }
+
+            sb.append(decryptedPair);
+            System.out.println("Decrypting pair " + a + b + " → " + decryptedPair);
+        }
+
+        return sb.toString();
+    }
+
+    // Find position of a character in matrix
+    private static int[] findPosition(char c) {
+        for (int i = 0; i < 5; i++) {
+            for (int j = 0; j < 5; j++) {
+                if (matrix[i][j] == c) {
+                    return new int[]{i, j};
+                }
+            }
+        }
+        return null;
+    }
+}
