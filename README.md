@@ -21,9 +21,10 @@ It uses a **5×5 key matrix** constructed from a keyword.
    - Enter a keyword (e.g., `MONARCHY`).  
    - Duplicate letters are removed, and the rest of the alphabet fills the matrix.  
 
-   Example key matrix for `MONARCHY`:
+  Example key matrix for `MONARCHY`:
 
 | M | O | N | A | R |
+|---|---|---|---|---|
 | C | H | Y | B | D |
 | E | F | G | I | K |
 | L | P | Q | S | T |
