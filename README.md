@@ -1,11 +1,11 @@
-# 🔐 Playfair Cipher in Java
+# Playfair Cipher in Java
 
 This repository contains a **Java implementation** of the **Playfair Cipher**, a classical polygraphic substitution cipher invented in 1854 by Charles Wheatstone.  
 The program supports **encryption and decryption** with detailed debug/print statements for learning and demonstration purposes.
 
 ---
 
-## 📖 What is Playfair Cipher?
+## What is Playfair Cipher?
 
 The Playfair Cipher encrypts pairs of letters (digraphs) instead of single letters, making it more secure than simple substitution ciphers.  
 It uses a **5×5 key matrix** constructed from a keyword.  
@@ -15,7 +15,7 @@ It uses a **5×5 key matrix** constructed from a keyword.
 
 ---
 
-## ⚙️ How It Works
+## How It Works
 
 1. **Key Matrix Generation**
    - Enter a keyword (e.g., `MONARCHY`).  
@@ -57,7 +57,7 @@ It uses a **5×5 key matrix** constructed from a keyword.
 
 ---
 
-## 🖥️ Running the Program
+## Running the Program
 
 ### Prerequisites
 - Java 17+ (tested with Java 21)
