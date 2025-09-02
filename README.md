@@ -23,11 +23,12 @@ It uses a **5×5 key matrix** constructed from a keyword.
 
    Example key matrix for `MONARCHY`:
 
-     M O N A R
-     C H Y B D
-     E F G I K
-     L P Q S T
-     U V W X Z
+| M | O | N | A | R |
+| C | H | Y | B | D |
+| E | F | G | I | K |
+| L | P | Q | S | T |
+| U | V | W | X | Z |
+
 
    
 2. **Plaintext Preparation**
